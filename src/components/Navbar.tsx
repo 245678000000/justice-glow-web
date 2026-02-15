@@ -14,10 +14,23 @@ const navItems = [
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("#hero");
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 50);
+
+      const sectionIds = navItems.map((item) => item.href.slice(1));
+      let current = sectionIds[0];
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 120) {
+          current = id;
+        }
+      }
+      setActiveSection(`#${current}`);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -45,7 +58,7 @@ const Navbar = () => {
             <li key={item.href}>
               <button
                 onClick={() => handleClick(item.href)}
-                className="text-sm font-body text-navy-foreground/80 hover:text-gold transition-colors"
+                className={`text-sm font-body transition-colors ${activeSection === item.href ? "text-gold font-semibold" : "text-navy-foreground/80 hover:text-gold"}`}
               >
                 {item.label}
               </button>
@@ -75,7 +88,7 @@ const Navbar = () => {
                 <li key={item.href}>
                   <button
                     onClick={() => handleClick(item.href)}
-                    className="text-lg font-body text-navy-foreground/80 hover:text-gold transition-colors"
+                    className={`text-lg font-body transition-colors ${activeSection === item.href ? "text-gold font-semibold" : "text-navy-foreground/80 hover:text-gold"}`}
                   >
                     {item.label}
                   </button>
