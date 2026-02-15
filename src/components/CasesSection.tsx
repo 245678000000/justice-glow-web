@@ -68,7 +68,7 @@ const CasesSection = () => (
               <span className="font-body text-xs tracking-wider text-accent border border-accent/30 px-3 py-1">
                 {c.category}
               </span>
-              <span className="font-mono text-xs text-muted-foreground/60">{c.caseNo}</span>
+              <span className="font-mono text-xs text-muted-foreground/80">{c.caseNo}</span>
             </div>
 
             <h3 className="font-display text-lg font-semibold text-card-foreground mb-6">

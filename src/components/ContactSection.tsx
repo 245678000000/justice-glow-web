@@ -64,14 +64,14 @@ const ContactSection = () => {
                 <FormField control={form.control} name="name" render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-body text-sm">姓名</FormLabel>
-                    <FormControl><Input placeholder="请输入姓名" {...field} /></FormControl>
+                    <FormControl><Input placeholder="请输入姓名" className="dark:bg-card" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField control={form.control} name="phone" render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-body text-sm">电话</FormLabel>
-                    <FormControl><Input placeholder="请输入电话" {...field} /></FormControl>
+                    <FormControl><Input placeholder="请输入电话" className="dark:bg-card" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
@@ -80,7 +80,7 @@ const ContactSection = () => {
               <FormField control={form.control} name="email" render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-body text-sm">邮箱</FormLabel>
-                  <FormControl><Input type="email" placeholder="请输入邮箱" {...field} /></FormControl>
+                  <FormControl><Input type="email" placeholder="请输入邮箱" className="dark:bg-card" {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
@@ -105,7 +105,7 @@ const ContactSection = () => {
               <FormField control={form.control} name="description" render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-body text-sm">案情概述</FormLabel>
-                  <FormControl><Textarea placeholder="请简要描述您的法律需求" rows={4} {...field} /></FormControl>
+                  <FormControl><Textarea placeholder="请简要描述您的法律需求" rows={4} className="dark:bg-card" {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
