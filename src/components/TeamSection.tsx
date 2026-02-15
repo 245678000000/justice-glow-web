@@ -1,12 +1,18 @@
 import { motion } from "framer-motion";
+import lawyerZhang from "@/assets/lawyer-zhang.jpg";
+import lawyerLi from "@/assets/lawyer-li.jpg";
+import lawyerWang from "@/assets/lawyer-wang.jpg";
+import lawyerChen from "@/assets/lawyer-chen.jpg";
+import lawyerLiu from "@/assets/lawyer-liu.jpg";
+import lawyerZhao from "@/assets/lawyer-zhao.jpg";
 
 const lawyers = [
-  { name: "张伟明", title: "高级合伙人 · 民商事诉讼", initials: "张" },
-  { name: "李雅琴", title: "合伙人 · 公司法务", initials: "李" },
-  { name: "王志强", title: "合伙人 · 刑事辩护", initials: "王" },
-  { name: "陈思远", title: "资深律师 · 知识产权", initials: "陈" },
-  { name: "刘婉清", title: "资深律师 · 婚姻家事", initials: "刘" },
-  { name: "赵鹏飞", title: "律师 · 劳动争议", initials: "赵" },
+  { name: "张伟明", title: "高级合伙人 · 民商事诉讼", photo: lawyerZhang },
+  { name: "李雅琴", title: "合伙人 · 公司法务", photo: lawyerLi },
+  { name: "王志强", title: "合伙人 · 刑事辩护", photo: lawyerWang },
+  { name: "陈思远", title: "资深律师 · 知识产权", photo: lawyerChen },
+  { name: "刘婉清", title: "资深律师 · 婚姻家事", photo: lawyerLiu },
+  { name: "赵鹏飞", title: "律师 · 劳动争议", photo: lawyerZhao },
 ];
 
 const TeamSection = () => (
@@ -38,8 +44,8 @@ const TeamSection = () => (
             transition={{ duration: 0.5, delay: i * 0.08 }}
             className="text-center"
           >
-            <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-navy flex items-center justify-center">
-              <span className="font-display text-2xl text-gold">{l.initials}</span>
+            <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold/30">
+              <img src={l.photo} alt={l.name} className="w-full h-full object-cover" />
             </div>
             <h3 className="font-display text-lg font-semibold text-foreground">{l.name}</h3>
             <div className="w-8 h-0.5 bg-gold mx-auto my-2" />
