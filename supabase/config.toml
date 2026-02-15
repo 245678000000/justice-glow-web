@@ -2,3 +2,6 @@ project_id = "gmfooppvohfbxrrrhhrj"
 
 [functions.legal-chat]
 verify_jwt = false
+
+[functions.analyze-case]
+verify_jwt = false
