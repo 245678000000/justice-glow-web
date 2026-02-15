@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import lawyerZhang from "@/assets/lawyer-zhang.jpg";
+import lawyerXing from "@/assets/lawyer-xing.jpg";
 import lawyerLi from "@/assets/lawyer-li.jpg";
 import lawyerWang from "@/assets/lawyer-wang.jpg";
 import lawyerChen from "@/assets/lawyer-chen.jpg";
@@ -9,13 +9,13 @@ import lawyerZhao from "@/assets/lawyer-zhao.jpg";
 
 const lawyers = [
   {
-    name: "张伟明",
+    name: "邢鹏",
     position: "创始合伙人 | 争议解决部主任",
-    license: "执业证号：11101200310528463",
-    tags: ["商事诉讼", "跨境仲裁", "执行保全"],
-    bio: "张伟明律师拥有逾二十年争议解决领域执业经验，曾主办多起标的额超十亿元的重大商事诉讼案件，在跨境仲裁与复杂商事争议中具有丰富经验与卓越业绩。",
-    fullBio: `张伟明律师毕业于北京大学法学院，获法学硕士学位，后赴英国伦敦大学学院（UCL）进修国际商事仲裁课程。自2003年执业以来，张律师专注于商事诉讼与国际仲裁领域，累计代理案件标的额逾五十亿元。\n\n代表性业绩包括：某大型国企与境外投资方十五亿元股权争议仲裁案（ICC仲裁，胜诉）；某上市公司系列关联交易纠纷诉讼（涉及资金逾八亿元）；某跨国能源企业投资争端调解与仲裁。\n\n张律师现任中国国际经济贸易仲裁委员会（CIETAC）仲裁员、北京仲裁委员会仲裁员、中国国际商会仲裁委员会委员。曾获《商法》杂志"年度卓越争议解决律师"称号，多次入选Chambers亚太区争议解决领域推荐律师。`,
-    photo: lawyerZhang,
+    license: "执业证号：11101202410639857",
+    tags: ["民商事诉讼", "合同纠纷", "法律检索"],
+    bio: "邢鹏律师具有扎实的法学理论功底与丰富的实务经验，通过国家统一法律职业资格考试（A证），擅长民商事诉讼与合同纠纷处理，并在法律科技与智能文书领域具有独到见解。",
+    fullBio: `邢鹏律师毕业于上海师范大学法学专业，获法学学士学位，现攻读法律硕士（国际法方向）。在校期间系统学习民法、商法、国际法等核心课程，成绩优异，多次获得学业奖学金。\n\n邢律师曾在绥化正达律师事务所从事实习工作，参与多起民商事诉讼案件的法律文书撰写、案件检索与证据整理工作，积累了扎实的实务经验。在实习期间独立完成多份法律意见书及代理词的起草工作，受到指导律师的高度评价。\n\n邢律师在法律科技领域表现突出：参与开发的AI法律文书生成系统荣获全国竞赛三等奖；在经天法律文书写作大赛中获得优胜奖；多次参加校际辩论赛并取得优异成绩。邢律师熟练掌握北大法宝、威科先行等法律检索工具，具备高效的法律研究与分析能力。`,
+    photo: lawyerXing,
   },
   {
     name: "李雅琴",
