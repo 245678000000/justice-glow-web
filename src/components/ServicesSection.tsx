@@ -1,13 +1,43 @@
 import { motion } from "framer-motion";
-import { Scale, Building2, Users, FileText, ShieldCheck, Gavel } from "lucide-react";
+import { Scale, Building2, Lightbulb, TrendingUp, ShieldCheck, Users } from "lucide-react";
 
 const services = [
-  { icon: Scale, title: "民商事诉讼", desc: "合同纠纷、侵权责任、债权债务等民商事案件的代理与诉讼。" },
-  { icon: Building2, title: "公司法务", desc: "企业设立、股权架构、合规审查、并购重组等全流程法律服务。" },
-  { icon: Users, title: "婚姻家事", desc: "离婚诉讼、财产分割、子女抚养、遗产继承等家事法律事务。" },
-  { icon: FileText, title: "知识产权", desc: "商标注册、专利申请、著作权保护及侵权维权代理。" },
-  { icon: ShieldCheck, title: "刑事辩护", desc: "刑事案件辩护、取保候审、刑事申诉及法律风险防控。" },
-  { icon: Gavel, title: "劳动争议", desc: "劳动合同纠纷、工伤赔偿、社保争议等劳动法律服务。" },
+  {
+    icon: Scale,
+    title: "争议解决",
+    subtitle: "诉讼与仲裁",
+    details: ["商事诉讼与仲裁代理", "跨境争议解决", "执行与保全程序"],
+  },
+  {
+    icon: Building2,
+    title: "公司商事",
+    subtitle: "并购与合规",
+    details: ["跨境并购", "尽职调查", "反垄断申报"],
+  },
+  {
+    icon: Lightbulb,
+    title: "知识产权",
+    subtitle: "专利与商标",
+    details: ["专利申请与布局", "商标维权与诉讼", "技术许可与转让"],
+  },
+  {
+    icon: TrendingUp,
+    title: "资本市场",
+    subtitle: "IPO与债券",
+    details: ["境内外IPO", "债券发行与合规", "私募股权投资"],
+  },
+  {
+    icon: ShieldCheck,
+    title: "刑事辩护",
+    subtitle: "白领犯罪与职务案件",
+    details: ["经济犯罪辩护", "职务犯罪代理", "刑事合规体系建设"],
+  },
+  {
+    icon: Users,
+    title: "劳动人事",
+    subtitle: "股权激励与争议",
+    details: ["股权激励方案设计", "劳动争议仲裁与诉讼", "高管合规与竞业限制"],
+  },
 ];
 
 const ServicesSection = () => (
@@ -21,11 +51,11 @@ const ServicesSection = () => (
         className="text-center mb-16"
       >
         <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-4">
-          服务领域
+          业务领域
         </h2>
         <div className="w-12 h-px bg-accent mx-auto mb-4" />
         <p className="font-body text-muted-foreground max-w-xl mx-auto text-sm">
-          涵盖六大核心法律领域，为您提供专业、精准的法律解决方案
+          涵盖六大核心法律领域，为企业与机构提供专业、精准的法律解决方案
         </p>
       </motion.div>
 
@@ -40,12 +70,21 @@ const ServicesSection = () => (
             className="group p-10 border border-border bg-card hover:shadow-subtle hover:border-accent/40 transition-all duration-300"
           >
             <s.icon className="h-8 w-8 text-accent mb-6 stroke-[1.5]" />
-            <h3 className="font-display text-lg font-semibold text-card-foreground mb-3">
+            <h3 className="font-display text-lg font-semibold text-card-foreground mb-1">
               {s.title}
             </h3>
-            <p className="font-body text-sm text-muted-foreground leading-relaxed">
-              {s.desc}
-            </p>
+            <p className="font-body text-xs text-muted-foreground mb-5">{s.subtitle}</p>
+            <ul className="space-y-2 mb-6">
+              {s.details.map((d) => (
+                <li key={d} className="font-body text-sm text-muted-foreground flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full bg-accent/60 shrink-0" />
+                  {d}
+                </li>
+              ))}
+            </ul>
+            <button className="font-body text-sm text-accent hover:text-accent/80 transition-colors tracking-wide">
+              了解详情 →
+            </button>
           </motion.div>
         ))}
       </div>
