@@ -4,7 +4,7 @@ const credentials = [
   {
     icon: ShieldCheck,
     title: "资质认证",
-    lines: ["中华人民共和国司法部备案", "执业许可证号：31110XXXXXXXX"],
+    lines: ["中华人民共和国司法部备案", "执业许可证号：31110000MD0285364T"],
   },
   {
     icon: Award,

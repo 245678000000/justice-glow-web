@@ -52,7 +52,7 @@ const StatsSection = () => (
             className="text-center"
           >
             <Counter target={s.value} suffix={s.suffix} />
-            <p className="font-body text-navy-foreground/60 mt-4 text-sm tracking-wide">{s.label}</p>
+            <p className="font-body text-navy-foreground/80 mt-4 text-sm tracking-wide">{s.label}</p>
           </motion.div>
         ))}
       </div>

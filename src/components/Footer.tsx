@@ -61,14 +61,14 @@ const Footer = () => {
 
         {/* 法律声明 */}
         <div className="border-t border-navy-foreground/10 pt-6 space-y-2 text-center">
-          <p className="font-body text-xs text-navy-foreground/30">
-            © 2026 鼎盛律师事务所 版权所有 &nbsp;|&nbsp; 京ICP备XXXXXXXX号-1 &nbsp;|&nbsp; 执业许可证号：31110XXXXXXXX
+          <p className="font-body text-xs text-navy-foreground/50">
+            © 2026 鼎盛律师事务所 版权所有 &nbsp;|&nbsp; 京ICP备2019036842号-1 &nbsp;|&nbsp; 执业许可证号：31110000MD0285364T
           </p>
-          <p className="font-body text-xs text-navy-foreground/30 max-w-2xl mx-auto">
+          <p className="font-body text-xs text-navy-foreground/50 max-w-2xl mx-auto">
             本网站信息仅供参考，不构成正式法律意见。具体案件请咨询专业律师，律师将根据具体情况提供初步法律分析。
           </p>
           <p className="font-body text-xs">
-            <a href="/privacy" className="text-navy-foreground/30 hover:text-accent transition-colors">
+            <a href="/privacy" className="text-navy-foreground/50 hover:text-accent transition-colors">
               隐私政策
             </a>
           </p>

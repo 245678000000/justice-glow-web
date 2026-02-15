@@ -22,7 +22,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-navy-foreground mb-8 leading-tight tracking-wide"
         >
-          鼎盛律师事务所
+          以专业精神，守护商业正义
         </motion.h1>
 
         <motion.p
