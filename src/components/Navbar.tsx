@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { useTheme } from "@/hooks/use-theme";
 
 const navItems = [
   { label: "首页", href: "#hero" },
@@ -16,6 +17,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#hero");
+  const { dark, toggle } = useTheme();
 
   useEffect(() => {
     const onScroll = () => {
@@ -67,13 +69,23 @@ const Navbar = () => {
           ))}
         </ul>
 
-        <Button
-          onClick={() => handleClick("#contact")}
-          variant="outline"
-          className="hidden md:inline-flex border-gold text-gold hover:bg-gold hover:text-gold-foreground transition-all font-body"
-        >
-          预约咨询
-        </Button>
+        <div className="hidden md:flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggle}
+            className="text-navy-foreground/80 hover:text-gold"
+          >
+            {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
+          <Button
+            onClick={() => handleClick("#contact")}
+            variant="outline"
+            className="border-gold text-gold hover:bg-gold hover:text-gold-foreground transition-all font-body"
+          >
+            预约咨询
+          </Button>
+        </div>
 
         {/* Mobile */}
         <Sheet open={open} onOpenChange={setOpen}>
@@ -95,6 +107,15 @@ const Navbar = () => {
                   </button>
                 </li>
               ))}
+              <li>
+                <button
+                  onClick={toggle}
+                  className="flex items-center gap-2 text-lg font-body text-navy-foreground/80 hover:text-gold transition-colors"
+                >
+                  {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                  {dark ? "浅色模式" : "深色模式"}
+                </button>
+              </li>
               <li>
                 <Button
                   onClick={() => handleClick("#contact")}
