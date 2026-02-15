@@ -67,7 +67,7 @@ const LawyerCard = ({ lawyer, index }: { lawyer: typeof lawyers[0]; index: numbe
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
-      className="border border-border bg-card p-8"
+      className="border border-border bg-card p-5 md:p-8"
     >
       <div className="flex gap-6">
         <div className="w-20 h-24 shrink-0 overflow-hidden bg-navy">

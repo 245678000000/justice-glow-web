@@ -62,9 +62,9 @@ const CasesSection = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="border border-border bg-card p-10 hover:shadow-subtle transition-all duration-300"
+            className="border border-border bg-card p-6 md:p-10 hover:shadow-subtle transition-all duration-300"
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
               <span className="font-body text-xs tracking-wider text-accent border border-accent/30 px-3 py-1">
                 {c.category}
               </span>
