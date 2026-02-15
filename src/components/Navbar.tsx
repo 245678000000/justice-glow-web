@@ -86,7 +86,7 @@ const Navbar = () => {
             variant="outline"
             className="border-gold/60 text-gold hover:border-gold hover:bg-transparent transition-all font-body text-sm tracking-wide"
           >
-            预约咨询
+            预约面谈
           </Button>
         </div>
 
@@ -129,7 +129,7 @@ const Navbar = () => {
                   variant="outline"
                   className="w-full border-gold/60 text-gold hover:border-gold hover:bg-transparent font-body"
                 >
-                  预约咨询
+                  预约面谈
                 </Button>
               </li>
             </ul>
