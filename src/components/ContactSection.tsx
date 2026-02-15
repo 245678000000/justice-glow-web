@@ -2,12 +2,14 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const schema = z.object({
   name: z.string().trim().min(1, "请输入姓名").max(50),
@@ -23,14 +25,29 @@ const caseTypes = ["争议解决", "公司商事", "知识产权", "资本市场
 
 const ContactSection = () => {
   const { toast } = useToast();
+  const [submitting, setSubmitting] = useState(false);
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { name: "", phone: "", email: "", caseType: "", description: "" },
   });
 
-  const onSubmit = (_data: FormData) => {
-    toast({ title: "提交成功", description: "我们将在24小时内与您联系，提供初步法律分析。" });
-    form.reset();
+  const onSubmit = async (data: FormData) => {
+    setSubmitting(true);
+    try {
+      const { data: result, error } = await supabase.functions.invoke("submit-contact", {
+        body: data,
+      });
+
+      if (error) throw error;
+
+      toast({ title: "提交成功", description: "我们将在24小时内与您联系，提供初步法律分析。" });
+      form.reset();
+    } catch (err) {
+      console.error("Submit error:", err);
+      toast({ title: "提交失败", description: "请稍后重试或直接拨打我们的电话。", variant: "destructive" });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -113,9 +130,10 @@ const ContactSection = () => {
               <Button
                 type="submit"
                 variant="outline"
+                disabled={submitting}
                 className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground font-body text-sm py-6 tracking-wide"
               >
-                提交预约
+                {submitting ? "提交中..." : "提交预约"}
               </Button>
             </form>
           </Form>
