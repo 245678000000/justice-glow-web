@@ -47,7 +47,7 @@ const HeroSection = () => {
             variant="outline"
             size="lg"
             onClick={() => scrollTo("#services")}
-            className="border-navy-foreground/30 text-navy-foreground hover:bg-navy-foreground/10 font-body px-8"
+            className="border-gold text-gold hover:bg-gold hover:text-gold-foreground font-body px-8"
           >
             了解我们
           </Button>
