@@ -34,20 +34,20 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-20 lg:py-28 bg-background">
+    <section id="contact" className="py-24 lg:py-[100px] bg-background">
       <div className="container mx-auto px-4 max-w-2xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-4">
             预约咨询
           </h2>
-          <div className="w-16 h-1 bg-gold mx-auto mb-4" />
-          <p className="font-body text-muted-foreground">
+          <div className="w-12 h-px bg-accent mx-auto mb-4" />
+          <p className="font-body text-muted-foreground text-sm">
             填写以下信息，我们的专业律师将尽快与您取得联系
           </p>
         </motion.div>
@@ -59,18 +59,18 @@ const ContactSection = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <FormField control={form.control} name="name" render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-body">姓名</FormLabel>
+                    <FormLabel className="font-body text-sm">姓名</FormLabel>
                     <FormControl><Input placeholder="请输入姓名" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField control={form.control} name="phone" render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-body">电话</FormLabel>
+                    <FormLabel className="font-body text-sm">电话</FormLabel>
                     <FormControl><Input placeholder="请输入电话" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -79,7 +79,7 @@ const ContactSection = () => {
 
               <FormField control={form.control} name="email" render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-body">邮箱</FormLabel>
+                  <FormLabel className="font-body text-sm">邮箱</FormLabel>
                   <FormControl><Input type="email" placeholder="请输入邮箱" {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
@@ -87,7 +87,7 @@ const ContactSection = () => {
 
               <FormField control={form.control} name="caseType" render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-body">案件类型</FormLabel>
+                  <FormLabel className="font-body text-sm">案件类型</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger><SelectValue placeholder="请选择案件类型" /></SelectTrigger>
@@ -104,7 +104,7 @@ const ContactSection = () => {
 
               <FormField control={form.control} name="description" render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-body">案情描述</FormLabel>
+                  <FormLabel className="font-body text-sm">案情描述</FormLabel>
                   <FormControl><Textarea placeholder="请简要描述您的案情" rows={4} {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
@@ -112,7 +112,8 @@ const ContactSection = () => {
 
               <Button
                 type="submit"
-                className="w-full bg-gold text-gold-foreground hover:bg-gold/90 font-body text-base py-6"
+                variant="outline"
+                className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground font-body text-sm py-6 tracking-wide"
               >
                 提交咨询
               </Button>

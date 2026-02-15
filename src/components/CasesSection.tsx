@@ -29,7 +29,7 @@ const cases = [
 ];
 
 const CasesSection = () => (
-  <section id="cases" className="py-20 lg:py-28 bg-secondary/30">
+  <section id="cases" className="py-24 lg:py-[100px] bg-secondary">
     <div className="container mx-auto px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -38,11 +38,11 @@ const CasesSection = () => (
         transition={{ duration: 0.6 }}
         className="text-center mb-16"
       >
-        <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+        <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-4">
           成功案例
         </h2>
-        <div className="w-16 h-1 bg-gold mx-auto mb-4" />
-        <p className="font-body text-muted-foreground max-w-xl mx-auto">
+        <div className="w-12 h-px bg-accent mx-auto mb-4" />
+        <p className="font-body text-muted-foreground max-w-xl mx-auto text-sm">
           以实力说话，用成果证明——精选代表性案例与客户评价
         </p>
       </motion.div>
@@ -55,22 +55,22 @@ const CasesSection = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: i * 0.15 }}
-            className="bg-card rounded-xl border border-border p-8 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 hover:border-gold/50 transition-all duration-300"
+            className="bg-card border border-border p-10 flex flex-col justify-between hover:shadow-subtle transition-all duration-300"
           >
             <div>
-              <span className="inline-block font-body text-xs font-semibold text-gold bg-gold/10 px-3 py-1 rounded-full mb-4">
+              <span className="inline-block font-body text-xs tracking-wider text-accent border border-accent/30 px-3 py-1 mb-6">
                 {c.category}
               </span>
               <h3 className="font-display text-lg font-semibold text-card-foreground mb-3">
                 {c.title}
               </h3>
-              <p className="font-body text-sm text-muted-foreground mb-6 leading-relaxed">
+              <p className="font-body text-sm text-muted-foreground mb-8 leading-relaxed">
                 {c.result}
               </p>
             </div>
 
-            <div className="border-t border-border pt-5">
-              <Quote className="h-5 w-5 text-gold/40 mb-2" />
+            <div className="border-t border-border pt-6">
+              <Quote className="h-4 w-4 text-accent/40 mb-3" />
               <p className="font-body text-sm italic text-muted-foreground mb-4 leading-relaxed">
                 "{c.testimonial}"
               </p>

@@ -11,7 +11,7 @@ const services = [
 ];
 
 const ServicesSection = () => (
-  <section id="services" className="py-20 lg:py-28 bg-background">
+  <section id="services" className="py-24 lg:py-[100px] bg-background">
     <div className="container mx-auto px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -20,16 +20,16 @@ const ServicesSection = () => (
         transition={{ duration: 0.6 }}
         className="text-center mb-16"
       >
-        <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+        <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-4">
           服务领域
         </h2>
-        <div className="w-16 h-1 bg-gold mx-auto mb-4" />
-        <p className="font-body text-muted-foreground max-w-xl mx-auto">
+        <div className="w-12 h-px bg-accent mx-auto mb-4" />
+        <p className="font-body text-muted-foreground max-w-xl mx-auto text-sm">
           涵盖六大核心法律领域，为您提供专业、精准的法律解决方案
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {services.map((s, i) => (
           <motion.div
             key={s.title}
@@ -37,10 +37,10 @@ const ServicesSection = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="group p-8 rounded-xl border border-border bg-card hover:shadow-xl hover:-translate-y-1 hover:border-gold/50 transition-all duration-300"
+            className="group p-10 border border-border bg-card hover:shadow-subtle hover:border-accent/40 transition-all duration-300"
           >
-            <s.icon className="h-10 w-10 text-gold mb-5" />
-            <h3 className="font-display text-xl font-semibold text-card-foreground mb-3">
+            <s.icon className="h-8 w-8 text-accent mb-6 stroke-[1.5]" />
+            <h3 className="font-display text-lg font-semibold text-card-foreground mb-3">
               {s.title}
             </h3>
             <p className="font-body text-sm text-muted-foreground leading-relaxed">
