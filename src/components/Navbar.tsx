@@ -7,7 +7,8 @@ const navItems = [
   { label: "首页", href: "#hero" },
   { label: "服务", href: "#services" },
   { label: "团队", href: "#team" },
-  { label: "案例", href: "#stats" },
+  { label: "案例", href: "#cases" },
+  { label: "数据", href: "#stats" },
   { label: "联系", href: "#contact" },
 ];
 
