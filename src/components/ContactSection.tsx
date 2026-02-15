@@ -19,7 +19,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const caseTypes = ["民商事诉讼", "公司法务", "婚姻家事", "知识产权", "刑事辩护", "劳动争议", "其他"];
+const caseTypes = ["争议解决", "公司商事", "知识产权", "资本市场", "刑事辩护", "劳动人事", "其他"];
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -29,7 +29,7 @@ const ContactSection = () => {
   });
 
   const onSubmit = (_data: FormData) => {
-    toast({ title: "提交成功", description: "我们将在24小时内与您联系。" });
+    toast({ title: "提交成功", description: "我们将在24小时内与您联系，提供初步法律分析。" });
     form.reset();
   };
 
@@ -44,11 +44,11 @@ const ContactSection = () => {
           className="text-center mb-16"
         >
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-4">
-            预约咨询
+            预约面谈
           </h2>
           <div className="w-12 h-px bg-accent mx-auto mb-4" />
           <p className="font-body text-muted-foreground text-sm">
-            填写以下信息，我们的专业律师将尽快与您取得联系
+            填写以下信息，我们的资深律师将尽快与您联系，提供初步法律分析
           </p>
         </motion.div>
 
@@ -104,8 +104,8 @@ const ContactSection = () => {
 
               <FormField control={form.control} name="description" render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-body text-sm">案情描述</FormLabel>
-                  <FormControl><Textarea placeholder="请简要描述您的案情" rows={4} {...field} /></FormControl>
+                  <FormLabel className="font-body text-sm">案情概述</FormLabel>
+                  <FormControl><Textarea placeholder="请简要描述您的法律需求" rows={4} {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
@@ -115,7 +115,7 @@ const ContactSection = () => {
                 variant="outline"
                 className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground font-body text-sm py-6 tracking-wide"
               >
-                提交咨询
+                提交预约
               </Button>
             </form>
           </Form>

@@ -22,7 +22,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-navy-foreground mb-8 leading-tight tracking-wide"
         >
-          您的权益，我们的使命
+          以专业精神，守护商业正义
         </motion.h1>
 
         <motion.p
@@ -31,8 +31,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="font-body text-base md:text-lg text-navy-foreground/70 max-w-xl mx-auto mb-12"
         >
-          二十余年法律实践，专注为企业与个人提供全方位、高品质的法律服务。
-          以专业、诚信、高效赢得客户信赖。
+          自2008年执业以来，鼎盛律师事务所专注为企业与机构提供全方位法律服务，以丰富经验和专业素养赢得客户长期信赖。
         </motion.p>
 
         <motion.div
@@ -55,7 +54,7 @@ const HeroSection = () => {
             onClick={() => scrollTo("#contact")}
             className="border-navy-foreground/40 text-navy-foreground hover:border-gold hover:text-gold font-body px-10"
           >
-            立即咨询
+            预约面谈
           </Button>
         </motion.div>
       </div>
