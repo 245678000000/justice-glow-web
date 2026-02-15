@@ -32,14 +32,14 @@ const Counter = ({ target, suffix }: { target: number; suffix: string }) => {
   }, [inView, target, count, rounded]);
 
   return (
-    <span ref={ref} className="font-display text-4xl md:text-5xl font-bold text-gold">
+    <span ref={ref} className="font-display text-4xl md:text-5xl font-semibold text-accent">
       {display}{suffix}
     </span>
   );
 };
 
 const StatsSection = () => (
-  <section id="stats" className="py-20 lg:py-28 bg-navy">
+  <section id="stats" className="py-24 lg:py-[100px] bg-navy">
     <div className="container mx-auto px-4">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-10">
         {stats.map((s, i) => (
@@ -52,7 +52,7 @@ const StatsSection = () => (
             className="text-center"
           >
             <Counter target={s.value} suffix={s.suffix} />
-            <p className="font-body text-navy-foreground/70 mt-3 text-sm">{s.label}</p>
+            <p className="font-body text-navy-foreground/60 mt-4 text-sm tracking-wide">{s.label}</p>
           </motion.div>
         ))}
       </div>

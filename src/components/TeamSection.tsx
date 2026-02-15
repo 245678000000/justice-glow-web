@@ -16,7 +16,7 @@ const lawyers = [
 ];
 
 const TeamSection = () => (
-  <section id="team" className="py-20 lg:py-28 bg-secondary/30">
+  <section id="team" className="py-24 lg:py-[100px] bg-secondary">
     <div className="container mx-auto px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -25,16 +25,16 @@ const TeamSection = () => (
         transition={{ duration: 0.6 }}
         className="text-center mb-16"
       >
-        <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+        <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-4">
           专业团队
         </h2>
-        <div className="w-16 h-1 bg-gold mx-auto mb-4" />
-        <p className="font-body text-muted-foreground max-w-xl mx-auto">
+        <div className="w-12 h-px bg-accent mx-auto mb-4" />
+        <p className="font-body text-muted-foreground max-w-xl mx-auto text-sm">
           汇聚行业精英，以丰富经验和专业素养为您保驾护航
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10">
         {lawyers.map((l, i) => (
           <motion.div
             key={l.name}
@@ -44,11 +44,11 @@ const TeamSection = () => (
             transition={{ duration: 0.5, delay: i * 0.08 }}
             className="text-center"
           >
-            <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold/30">
-              <img src={l.photo} alt={l.name} className="w-full h-full object-cover" />
+            <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden border border-border">
+              <img src={l.photo} alt={l.name} className="w-full h-full object-cover img-professional" />
             </div>
-            <h3 className="font-display text-lg font-semibold text-foreground">{l.name}</h3>
-            <div className="w-8 h-0.5 bg-gold mx-auto my-2" />
+            <h3 className="font-display text-base font-semibold text-foreground">{l.name}</h3>
+            <div className="w-6 h-px bg-accent mx-auto my-2" />
             <p className="font-body text-xs text-muted-foreground">{l.title}</p>
           </motion.div>
         ))}

@@ -22,7 +22,6 @@ const Navbar = () => {
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 50);
-
       const sectionIds = navItems.map((item) => item.href.slice(1));
       let current = sectionIds[0];
       for (const id of sectionIds) {
@@ -46,22 +45,26 @@ const Navbar = () => {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-navy/90 backdrop-blur-md shadow-lg"
+          ? "bg-navy/95 backdrop-blur-sm shadow-subtle"
           : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between py-4 px-4 lg:px-8">
-        <a href="#hero" className="font-display text-2xl font-bold text-gold">
+      <div className="container mx-auto flex items-center justify-between py-5 px-4 lg:px-8">
+        <a href="#hero" className="font-display text-xl font-semibold text-gold tracking-wider">
           鼎盛律所
         </a>
 
         {/* Desktop */}
-        <ul className="hidden md:flex items-center gap-8">
+        <ul className="hidden md:flex items-center gap-10">
           {navItems.map((item) => (
             <li key={item.href}>
               <button
                 onClick={() => handleClick(item.href)}
-                className={`text-sm font-body transition-colors ${activeSection === item.href ? "text-gold font-semibold" : "text-navy-foreground/80 hover:text-gold"}`}
+                className={`text-sm font-body tracking-wide transition-colors ${
+                  activeSection === item.href
+                    ? "text-gold"
+                    : "text-navy-foreground/70 hover:text-gold"
+                }`}
               >
                 {item.label}
               </button>
@@ -69,19 +72,19 @@ const Navbar = () => {
           ))}
         </ul>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-4">
           <Button
             variant="ghost"
             size="icon"
             onClick={toggle}
-            className="text-navy-foreground/80 hover:text-gold"
+            className="text-navy-foreground/60 hover:text-gold hover:bg-transparent"
           >
-            {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
           <Button
             onClick={() => handleClick("#contact")}
             variant="outline"
-            className="border-gold text-gold hover:bg-gold hover:text-gold-foreground transition-all font-body"
+            className="border-gold/60 text-gold hover:border-gold hover:bg-transparent transition-all font-body text-sm tracking-wide"
           >
             预约咨询
           </Button>
@@ -91,17 +94,21 @@ const Navbar = () => {
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild className="md:hidden">
             <Button variant="ghost" size="icon" className="text-navy-foreground">
-              <Menu className="h-6 w-6" />
+              <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="bg-navy border-navy w-64">
-            <SheetTitle className="text-gold font-display">鼎盛律所</SheetTitle>
-            <ul className="mt-8 flex flex-col gap-6">
+            <SheetTitle className="text-gold font-display tracking-wider">鼎盛律所</SheetTitle>
+            <ul className="mt-10 flex flex-col gap-6">
               {navItems.map((item) => (
                 <li key={item.href}>
                   <button
                     onClick={() => handleClick(item.href)}
-                    className={`text-lg font-body transition-colors ${activeSection === item.href ? "text-gold font-semibold" : "text-navy-foreground/80 hover:text-gold"}`}
+                    className={`text-base font-body transition-colors ${
+                      activeSection === item.href
+                        ? "text-gold"
+                        : "text-navy-foreground/70 hover:text-gold"
+                    }`}
                   >
                     {item.label}
                   </button>
@@ -110,16 +117,17 @@ const Navbar = () => {
               <li>
                 <button
                   onClick={toggle}
-                  className="flex items-center gap-2 text-lg font-body text-navy-foreground/80 hover:text-gold transition-colors"
+                  className="flex items-center gap-2 text-base font-body text-navy-foreground/70 hover:text-gold transition-colors"
                 >
-                  {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                  {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                   {dark ? "浅色模式" : "深色模式"}
                 </button>
               </li>
               <li>
                 <Button
                   onClick={() => handleClick("#contact")}
-                  className="w-full bg-gold text-gold-foreground hover:bg-gold/90 font-body"
+                  variant="outline"
+                  className="w-full border-gold/60 text-gold hover:border-gold hover:bg-transparent font-body"
                 >
                   预约咨询
                 </Button>
