@@ -1,78 +1,75 @@
 
 
-# 深色模式修复 + 执业证号真实化 + Hero 标题恢复
+# AI 智能案情分析功能
 
-## 问题概述
+## 功能概述
 
-1. **深色模式文字不清楚** — 多个组件在深色模式下存在对比度问题
-2. **执业证号都是 X** — 需要替换为逼真的数字
-3. **Hero 标题** — 从"鼎盛律师事务所"改回口号式标题
+当用户在"预约面谈"表单中输入案情描述后，点击"AI 分析"按钮（或停止输入一段时间后自动触发），系统会调用 AI 对案情进行分析，返回：
+- **建议案件类型** — 自动填充到案件类型下拉框
+- **初步法律分析** — 以卡片形式展示在表单下方，包含涉及法律领域、关键法律要点、建议方向等
 
----
+## 实现步骤
 
-## 修改方案
+### 1. 创建后端函数 `analyze-case`
 
-### 1. Hero 标题恢复为口号
+新建 `supabase/functions/analyze-case/index.ts`，使用 Lovable AI（tool calling 模式）提取结构化输出：
 
-**文件**: `src/components/HeroSection.tsx`
+- 接收 `{ description: string }` 
+- 调用 AI Gateway，使用 tool calling 返回结构化 JSON：
+  - `case_type`: 建议的案件类型（从预设列表中选择）
+  - `summary`: 一句话概括案情
+  - `legal_areas`: 涉及的法律领域
+  - `key_points`: 关键法律要点（2-4 条）
+  - `suggested_actions`: 建议下一步行动
+- 处理 429/402 等错误
 
-将标题从"鼎盛律师事务所"改为专业口号，例如：
+### 2. 更新 `supabase/config.toml`
 
-> **以专业精神，守护商业正义**
+为新函数添加配置，设置 `verify_jwt = false`。
 
-副标题保持现有描述不变。
+### 3. 修改 `ContactSection.tsx`
 
-### 2. 深色模式对比度修复
+- 在案情描述输入框旁添加"AI 智能分析"按钮
+- 点击后调用 `analyze-case` 函数
+- 收到结果后：
+  - 自动将建议的案件类型填入下拉框（用户可修改）
+  - 在表单下方显示一个分析结果卡片，包含法律要点和建议方向
+- 添加加载状态（分析中...动画）
+- 错误时显示 toast 提示
 
-**核心问题**: 深色模式下 `--background`（218 50% 10%）与 `--navy`（218 50% 10%）几乎相同，导致部分区域文字与背景融为一体。需要逐个检查以下组件：
+## 用户体验流程
 
-| 组件 | 问题 | 修复 |
-|------|------|------|
-| `Navbar.tsx` | 滚动后 `bg-navy/95` 在深色模式下与页面背景混淆 | 深色模式下改用 `dark:bg-card/95` 或增加边框区分 |
-| `TrustBar.tsx` | `bg-secondary` 上的 `text-foreground` 和 `text-muted-foreground` 对比度不足 | 确认颜色对比度，必要时提高文字亮度 |
-| `ServicesSection.tsx` | `bg-card` 卡片边框在深色模式下不明显 | 增强 `border-border` 在深色模式的亮度 |
-| `ContactSection.tsx` | 表单输入框和标签在深色背景下可能不清楚 | 确保 input 背景与页面背景有区分 |
-| `CasesSection.tsx` | 案号 `text-muted-foreground/60` 过淡 | 提高至 `text-muted-foreground/80` |
-| `Footer.tsx` | ICP 备案等 `text-navy-foreground/30` 过淡 | 提高至 `/40` 或 `/50` |
-| `StatsSection.tsx` | `text-navy-foreground/60` 在深色模式偏暗 | 适当提高透明度 |
+1. 用户填写案情描述
+2. 点击描述框下方的"AI 智能分析"按钮
+3. 按钮变为加载状态，显示"分析中..."
+4. 分析完成后：
+   - 案件类型下拉框自动选中 AI 建议的类型（带提示"AI 建议"）
+   - 下方出现分析结果卡片，包含要点列表
+5. 用户可以修改案件类型、继续编辑描述
+6. 最终点击"提交预约"
 
-**CSS 变量调整**（`src/index.css`）:
-- 深色模式下 `--border` 从 `220 25% 20%` 提高到约 `220 25% 25%`，让边框更清晰
-- 深色模式下 `--muted-foreground` 从 `215 16% 60%` 微调到 `215 16% 65%`，提升辅助文字可读性
+## 技术细节
 
-### 3. 执业证号真实化
+### Edge Function 结构化输出（tool calling）
 
-将所有 `XXXXXXXX` 替换为逼真的数字格式：
+```text
+tool: analyze_case
+参数:
+  - case_type: enum (争议解决/公司商事/知识产权/资本市场/刑事辩护/劳动人事/其他)
+  - summary: string
+  - legal_areas: string[]
+  - key_points: string[]  
+  - suggested_actions: string[]
+```
 
-**律师执业证号格式**: `1 + 4位地区码 + 4位年份 + 8位序号`
+### 前端状态管理
 
-| 律师 | 新证号 |
-|------|--------|
-| 张伟明 | 11101200310528463 |
-| 李雅琴 | 11101200511792804 |
-| 王志强 | 11101200810647291 |
-| 陈思远 | 11101201210853672 |
-| 刘婉清 | 11101201410926138 |
-| 赵鹏飞 | 11101201610783549 |
+- 新增 `analyzing` 布尔状态控制加载
+- 新增 `analysisResult` 状态存储 AI 返回结果
+- 使用 `form.setValue("caseType", result.case_type)` 自动填充
 
-**TrustBar 执业许可证号**: `31110000MD0285364T`
+### UI 组件
 
-**Footer ICP 备案号**: `京ICP备2019036842号-1`，执业许可证号同 TrustBar
-
----
-
-## 涉及文件
-
-| 文件 | 改动内容 |
-|------|----------|
-| `src/index.css` | 微调深色模式 CSS 变量（border、muted-foreground） |
-| `src/components/HeroSection.tsx` | 标题改为口号 |
-| `src/components/Navbar.tsx` | 深色模式导航栏背景和文字对比度 |
-| `src/components/TeamSection.tsx` | 替换6位律师的执业证号 |
-| `src/components/TrustBar.tsx` | 替换执业许可证号，检查深色模式文字 |
-| `src/components/Footer.tsx` | 替换ICP和许可证号，提高深色模式文字透明度 |
-| `src/components/CasesSection.tsx` | 提高案号文字在深色模式的可读性 |
-| `src/components/StatsSection.tsx` | 提高深色模式文字对比度 |
-| `src/components/ContactSection.tsx` | 确保表单在深色模式下清晰可用 |
-| `src/components/ServicesSection.tsx` | 卡片边框和文字深色模式优化 |
+- 分析按钮：使用 `Sparkles` 图标 + "AI 智能分析"文字
+- 结果卡片：使用现有的 Card 组件，列表项前带图标
 
