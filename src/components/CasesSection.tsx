@@ -1,35 +1,42 @@
 import { motion } from "framer-motion";
-import { Quote } from "lucide-react";
 
 const cases = [
   {
-    category: "公司法务",
-    title: "某科技集团股权重组案",
-    result: "成功完成涉及12亿元资产的股权重组，保障各方股东权益",
-    testimonial: "鼎盛律所团队在极其复杂的股权架构中找到了最优方案，专业能力令人钦佩。",
-    client: "张总",
-    company: "某科技集团CEO",
+    title: "某上市公司重大资产重组案",
+    caseNo: "（2023）京民初 XX 号",
+    amount: "¥12.6亿元",
+    result: "全面胜诉，成功完成资产重组",
+    lawyers: ["张伟明", "李雅琴"],
+    category: "公司商事",
   },
   {
+    title: "某科技企业跨境商标侵权案",
+    caseNo: "（2023）京知民终 XX 号",
+    amount: "¥8,000万元",
+    result: "为客户挽回全部损失并获赔偿",
+    lawyers: ["陈思远"],
     category: "知识产权",
-    title: "跨国商标侵权维权案",
-    result: "成功维权并获赔偿金额800万元，有效保护了客户品牌权益",
-    testimonial: "从取证到庭审，每一步都精准有力，真正值得信赖的法律伙伴。",
-    client: "李女士",
-    company: "某消费品牌创始人",
   },
   {
-    category: "民商事诉讼",
-    title: "大型建设工程合同纠纷",
-    result: "为客户挽回经济损失逾3000万元，案件历时仅6个月高效结案",
-    testimonial: "面对复杂的工程纠纷，律师团队展现了卓越的专业水准和高效执行力。",
-    client: "王总",
-    company: "某建筑集团法务总监",
+    title: "某建设集团工程合同争议案",
+    caseNo: "（2022）京仲裁字第 XXX 号",
+    amount: "¥3.2亿元",
+    result: "仲裁裁决支持我方全部请求",
+    lawyers: ["张伟明", "赵鹏飞"],
+    category: "争议解决",
+  },
+  {
+    title: "某金融机构高管职务犯罪案",
+    caseNo: "（2023）京刑初 XX 号",
+    amount: "——",
+    result: "取得不起诉决定",
+    lawyers: ["王志强"],
+    category: "刑事辩护",
   },
 ];
 
 const CasesSection = () => (
-  <section id="cases" className="py-24 lg:py-[100px] bg-secondary">
+  <section id="cases" className="py-24 lg:py-[100px] bg-background">
     <div className="container mx-auto px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -39,45 +46,59 @@ const CasesSection = () => (
         className="text-center mb-16"
       >
         <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-4">
-          成功案例
+          代表性业绩
         </h2>
         <div className="w-12 h-px bg-accent mx-auto mb-4" />
         <p className="font-body text-muted-foreground max-w-xl mx-auto text-sm">
-          以实力说话，用成果证明——精选代表性案例与客户评价
+          精选代表性案例，展现专业实力与服务品质
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {cases.map((c, i) => (
           <motion.div
             key={c.title}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: i * 0.15 }}
-            className="bg-card border border-border p-10 flex flex-col justify-between hover:shadow-subtle transition-all duration-300"
+            transition={{ duration: 0.5, delay: i * 0.1 }}
+            className="border border-border bg-card p-10 hover:shadow-subtle transition-all duration-300"
           >
-            <div>
-              <span className="inline-block font-body text-xs tracking-wider text-accent border border-accent/30 px-3 py-1 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <span className="font-body text-xs tracking-wider text-accent border border-accent/30 px-3 py-1">
                 {c.category}
               </span>
-              <h3 className="font-display text-lg font-semibold text-card-foreground mb-3">
-                {c.title}
-              </h3>
-              <p className="font-body text-sm text-muted-foreground mb-8 leading-relaxed">
-                {c.result}
-              </p>
+              <span className="font-mono text-xs text-muted-foreground/60">{c.caseNo}</span>
             </div>
 
-            <div className="border-t border-border pt-6">
-              <Quote className="h-4 w-4 text-accent/40 mb-3" />
-              <p className="font-body text-sm italic text-muted-foreground mb-4 leading-relaxed">
-                "{c.testimonial}"
-              </p>
+            <h3 className="font-display text-lg font-semibold text-card-foreground mb-6">
+              {c.title}
+            </h3>
+
+            <div className="grid grid-cols-2 gap-4 mb-6 py-4 border-t border-b border-border">
               <div>
-                <p className="font-body text-sm font-semibold text-card-foreground">{c.client}</p>
-                <p className="font-body text-xs text-muted-foreground">{c.company}</p>
+                <p className="font-body text-xs text-muted-foreground mb-1">争议金额</p>
+                <p className="font-mono text-sm font-semibold text-foreground">{c.amount}</p>
               </div>
+              <div>
+                <p className="font-body text-xs text-muted-foreground mb-1">代理结果</p>
+                <p className="font-body text-sm font-semibold text-foreground">{c.result}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="font-body text-xs text-muted-foreground">主办律师：</span>
+              {c.lawyers.map((name) => (
+                <button
+                  key={name}
+                  onClick={() => {
+                    document.getElementById("team")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="font-body text-xs text-accent hover:text-accent/80 transition-colors"
+                >
+                  {name}
+                </button>
+              ))}
             </div>
           </motion.div>
         ))}
