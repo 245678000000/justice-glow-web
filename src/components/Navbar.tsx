@@ -1,0 +1,100 @@
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+
+const navItems = [
+  { label: "首页", href: "#hero" },
+  { label: "服务", href: "#services" },
+  { label: "团队", href: "#team" },
+  { label: "案例", href: "#stats" },
+  { label: "联系", href: "#contact" },
+];
+
+const Navbar = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const handleClick = (href: string) => {
+    setOpen(false);
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-navy/90 backdrop-blur-md shadow-lg"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="container mx-auto flex items-center justify-between py-4 px-4 lg:px-8">
+        <a href="#hero" className="font-display text-2xl font-bold text-gold">
+          鼎盛律所
+        </a>
+
+        {/* Desktop */}
+        <ul className="hidden md:flex items-center gap-8">
+          {navItems.map((item) => (
+            <li key={item.href}>
+              <button
+                onClick={() => handleClick(item.href)}
+                className="text-sm font-body text-navy-foreground/80 hover:text-gold transition-colors"
+              >
+                {item.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        <Button
+          onClick={() => handleClick("#contact")}
+          variant="outline"
+          className="hidden md:inline-flex border-gold text-gold hover:bg-gold hover:text-gold-foreground transition-all font-body"
+        >
+          预约咨询
+        </Button>
+
+        {/* Mobile */}
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="icon" className="text-navy-foreground">
+              <Menu className="h-6 w-6" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="bg-navy border-navy w-64">
+            <SheetTitle className="text-gold font-display">鼎盛律所</SheetTitle>
+            <ul className="mt-8 flex flex-col gap-6">
+              {navItems.map((item) => (
+                <li key={item.href}>
+                  <button
+                    onClick={() => handleClick(item.href)}
+                    className="text-lg font-body text-navy-foreground/80 hover:text-gold transition-colors"
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              ))}
+              <li>
+                <Button
+                  onClick={() => handleClick("#contact")}
+                  className="w-full bg-gold text-gold-foreground hover:bg-gold/90 font-body"
+                >
+                  预约咨询
+                </Button>
+              </li>
+            </ul>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
