@@ -8,6 +8,7 @@ import StatsSection from "@/components/StatsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import LegalChatWidget from "@/components/LegalChatWidget";
+import RetellWidget from "@/components/RetellWidget";
 
 const Index = () => (
   <div className="min-h-screen">
@@ -21,6 +22,7 @@ const Index = () => (
     <ContactSection />
     <Footer />
     <LegalChatWidget />
+    <RetellWidget />
   </div>
 );
 
