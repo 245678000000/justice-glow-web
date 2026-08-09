@@ -1,26 +1,70 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { corsHeaders, jsonResponse } from "../_shared/cors.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+const LIMITS = {
+  name: 50,
+  phone: 20,
+  email: 100,
+  caseType: 20,
+  description: 1000,
+} as const;
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** 转义邮件 HTML，避免用户输入被当作标签解析 */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function validate(payload: Record<string, unknown>): { ok: true; data: Record<keyof typeof LIMITS, string> } | { ok: false; error: string } {
+  const result = {} as Record<keyof typeof LIMITS, string>;
+
+  for (const [field, max] of Object.entries(LIMITS) as [keyof typeof LIMITS, number][]) {
+    const raw = payload[field];
+    if (typeof raw !== "string" || raw.trim().length === 0) {
+      return { ok: false, error: "所有字段均为必填" };
+    }
+    const value = raw.trim();
+    if (value.length > max) {
+      return { ok: false, error: `字段 ${field} 超出长度限制（最多 ${max} 字符）` };
+    }
+    result[field] = value;
+  }
+
+  if (!EMAIL_RE.test(result.email)) {
+    return { ok: false, error: "邮箱格式不正确" };
+  }
+
+  return { ok: true, data: result };
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: corsHeaders(req) });
+  }
+
+  if (req.method !== "POST") {
+    return jsonResponse(req, { error: "Method not allowed" }, 405);
+  }
+
+  // 每个 IP 每 10 分钟最多提交 5 次
+  if (!rateLimit(req, 5, 10 * 60 * 1000)) {
+    return jsonResponse(req, { error: "提交过于频繁，请稍后再试" }, 429);
   }
 
   try {
-    const { name, phone, email, caseType, description } = await req.json();
-
-    // Validate
-    if (!name || !phone || !email || !caseType || !description) {
-      return new Response(
-        JSON.stringify({ error: "所有字段均为必填" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    const payload = await req.json();
+    const validated = validate(payload);
+    if (!validated.ok) {
+      return jsonResponse(req, { error: validated.error }, 400);
     }
+    const { name, phone, email, caseType, description } = validated.data;
 
     // Save to database
     const supabase = createClient(
@@ -34,10 +78,7 @@ Deno.serve(async (req) => {
 
     if (dbError) {
       console.error("DB error:", dbError);
-      return new Response(
-        JSON.stringify({ error: "存储失败" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return jsonResponse(req, { error: "存储失败" }, 500);
     }
 
     // Send email notification via Resend
@@ -45,6 +86,9 @@ Deno.serve(async (req) => {
     const notificationEmail = Deno.env.get("NOTIFICATION_EMAIL");
 
     if (resendKey && notificationEmail) {
+      const row = (label: string, value: string) =>
+        `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">${label}</td><td style="padding:8px;border:1px solid #ddd;">${escapeHtml(value)}</td></tr>`;
+
       const emailRes = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
@@ -58,11 +102,11 @@ Deno.serve(async (req) => {
           html: `
             <h2>新的咨询预约</h2>
             <table style="border-collapse:collapse;width:100%;max-width:500px;">
-              <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">姓名</td><td style="padding:8px;border:1px solid #ddd;">${name}</td></tr>
-              <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">电话</td><td style="padding:8px;border:1px solid #ddd;">${phone}</td></tr>
-              <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">邮箱</td><td style="padding:8px;border:1px solid #ddd;">${email}</td></tr>
-              <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">案件类型</td><td style="padding:8px;border:1px solid #ddd;">${caseType}</td></tr>
-              <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">案情描述</td><td style="padding:8px;border:1px solid #ddd;">${description}</td></tr>
+              ${row("姓名", name)}
+              ${row("电话", phone)}
+              ${row("邮箱", email)}
+              ${row("案件类型", caseType)}
+              ${row("案情描述", description)}
             </table>
             <p style="color:#888;font-size:12px;margin-top:16px;">此邮件由鼎盛律所官网自动发送</p>
           `,
@@ -75,15 +119,9 @@ Deno.serve(async (req) => {
       }
     }
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return jsonResponse(req, { success: true });
   } catch (err) {
-    console.error("Error:", err);
-    return new Response(
-      JSON.stringify({ error: "服务器错误" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    console.error("submit-contact error:", err);
+    return jsonResponse(req, { error: "服务器错误" }, 500);
   }
 });

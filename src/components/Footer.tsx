@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 const navLinks = [
@@ -68,9 +69,9 @@ const Footer = () => {
             本网站信息仅供参考，不构成正式法律意见。具体案件请咨询专业律师，律师将根据具体情况提供初步法律分析。
           </p>
           <p className="font-body text-xs">
-            <a href="/privacy" className="text-navy-foreground/50 hover:text-accent transition-colors">
+            <Link to="/privacy" className="text-navy-foreground/50 hover:text-accent transition-colors">
               隐私政策
-            </a>
+            </Link>
           </p>
         </div>
       </div>

@@ -1,12 +1,18 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { corsHeaders, jsonResponse } from "../_shared/cors.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: corsHeaders(req) });
+  }
+
+  if (req.method !== "POST") {
+    return jsonResponse(req, { error: "Method not allowed" }, 405);
+  }
+
+  // 每个 IP 每 5 分钟最多发起 3 次通话，语音按分钟计费，需要更严格的限制
+  if (!rateLimit(req, 3, 5 * 60 * 1000)) {
+    return jsonResponse(req, { error: "呼叫过于频繁，请稍后再试" }, 429);
   }
 
   try {
@@ -14,7 +20,18 @@ Deno.serve(async (req) => {
     if (!RETELL_API_KEY) throw new Error("RETELL_API_KEY is not configured");
 
     const { agent_id } = await req.json();
-    if (!agent_id) throw new Error("agent_id is required");
+    if (typeof agent_id !== "string" || agent_id.length === 0) {
+      return jsonResponse(req, { error: "agent_id is required" }, 400);
+    }
+
+    // 只允许拨打服务端配置的坐席，避免本站接口被用来给任意坐席刷通话
+    const allowedAgents = (Deno.env.get("RETELL_ALLOWED_AGENT_IDS") ?? "")
+      .split(",")
+      .map((id) => id.trim())
+      .filter(Boolean);
+    if (allowedAgents.length > 0 && !allowedAgents.includes(agent_id)) {
+      return jsonResponse(req, { error: "该语音坐席不可用" }, 403);
+    }
 
     const response = await fetch("https://api.retellai.com/v2/create-web-call", {
       method: "POST",
@@ -28,21 +45,17 @@ Deno.serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error("Retell API error:", response.status, errorText);
-      return new Response(
-        JSON.stringify({ error: `Retell API error: ${response.status}` }),
-        { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return jsonResponse(req, { error: "无法创建通话，请稍后再试" }, response.status);
     }
 
     const data = await response.json();
-    return new Response(JSON.stringify(data), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    // 只回传客户端建立通话所需的字段
+    return jsonResponse(req, {
+      access_token: data.access_token,
+      call_id: data.call_id,
     });
   } catch (e) {
     console.error("retell-web-call error:", e);
-    return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return jsonResponse(req, { error: "服务暂时不可用，请稍后再试" }, 500);
   }
 });

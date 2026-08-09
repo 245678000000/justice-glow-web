@@ -5,6 +5,13 @@ import type { Database } from './types';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
+if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+  // 缺少配置时立刻给出可读的报错，避免在运行时抛出 "Invalid URL" 之类的隐晦错误
+  throw new Error(
+    "缺少 Supabase 环境变量：请复制 .env.example 为 .env，并填写 VITE_SUPABASE_URL 与 VITE_SUPABASE_PUBLISHABLE_KEY。"
+  );
+}
+
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 

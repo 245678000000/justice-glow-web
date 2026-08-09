@@ -20,7 +20,10 @@ const Navbar = () => {
   const { dark, toggle } = useTheme();
 
   useEffect(() => {
-    const onScroll = () => {
+    let frame = 0;
+
+    const measure = () => {
+      frame = 0;
       setScrolled(window.scrollY > 50);
       const sectionIds = navItems.map((item) => item.href.slice(1));
       let current = sectionIds[0];
@@ -32,8 +35,18 @@ const Navbar = () => {
       }
       setActiveSection(`#${current}`);
     };
+
+    // 每帧最多测量一次，避免滚动时反复触发布局计算
+    const onScroll = () => {
+      if (frame === 0) frame = window.requestAnimationFrame(measure);
+    };
+
+    measure();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame !== 0) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   const handleClick = (href: string) => {
@@ -60,6 +73,7 @@ const Navbar = () => {
             <li key={item.href}>
               <button
                 onClick={() => handleClick(item.href)}
+                aria-current={activeSection === item.href ? "true" : undefined}
                 className={`text-sm font-body tracking-wide transition-colors ${
                   activeSection === item.href
                     ? "text-gold"
@@ -77,6 +91,7 @@ const Navbar = () => {
             variant="ghost"
             size="icon"
             onClick={toggle}
+            aria-label={dark ? "切换到浅色模式" : "切换到深色模式"}
             className="text-navy-foreground/60 hover:text-gold hover:bg-transparent"
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -93,7 +108,7 @@ const Navbar = () => {
         {/* Mobile */}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon" className="text-navy-foreground">
+            <Button variant="ghost" size="icon" aria-label="打开导航菜单" className="text-navy-foreground">
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
