@@ -1,10 +1,12 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Bot, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import ReactMarkdown from "react-markdown";
 import { useToast } from "@/hooks/use-toast";
+
+// Markdown 渲染器只在助手首次回复时才需要，按需加载以减小首屏体积
+const ReactMarkdown = lazy(() => import("react-markdown"));
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -92,9 +94,13 @@ const LegalChatWidget = () => {
           }
         }
       }
-    } catch (e: any) {
+    } catch (e) {
       console.error("Chat error:", e);
-      toast({ title: "发送失败", description: e.message || "请稍后再试", variant: "destructive" });
+      toast({
+        title: "发送失败",
+        description: e instanceof Error ? e.message : "请稍后再试",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -120,6 +126,7 @@ const LegalChatWidget = () => {
           >
             <Button
               onClick={() => setOpen(true)}
+              aria-label="打开 AI 法律咨询助手"
               className="h-14 w-14 rounded-full bg-accent text-accent-foreground shadow-lg hover:bg-accent/90"
             >
               <MessageCircle className="h-6 w-6" />
@@ -147,7 +154,7 @@ const LegalChatWidget = () => {
                   <p className="text-[11px] opacity-70">仅供参考，不构成法律意见</p>
                 </div>
               </div>
-              <button onClick={() => setOpen(false)} className="p-1 rounded hover:bg-primary-foreground/10 transition-colors">
+              <button onClick={() => setOpen(false)} aria-label="关闭对话窗口" className="p-1 rounded hover:bg-primary-foreground/10 transition-colors">
                 <X className="h-4 w-4" />
               </button>
             </div>
@@ -177,7 +184,9 @@ const LegalChatWidget = () => {
                   >
                     {msg.role === "assistant" ? (
                       <div className="prose prose-sm dark:prose-invert max-w-none [&>p]:mb-1 [&>ul]:mb-1 [&>ol]:mb-1">
-                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                        <Suspense fallback={<p className="whitespace-pre-wrap">{msg.content}</p>}>
+                          <ReactMarkdown>{msg.content}</ReactMarkdown>
+                        </Suspense>
                       </div>
                     ) : (
                       <p className="whitespace-pre-wrap">{msg.content}</p>

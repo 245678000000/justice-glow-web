@@ -1,13 +1,15 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "justice-glow-web",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "鼎盛律师事务所官网：业务展示 + AI 法律咨询 + AI 语音接待",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest"

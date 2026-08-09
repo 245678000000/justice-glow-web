@@ -1,7 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,16 +11,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Sparkles, Scale, Lightbulb, ArrowRight, Loader2 } from "lucide-react";
-
-const schema = z.object({
-  name: z.string().trim().min(1, "请输入姓名").max(50),
-  phone: z.string().trim().min(1, "请输入电话").max(20),
-  email: z.string().trim().email("请输入有效邮箱").max(100),
-  caseType: z.string().min(1, "请选择案件类型"),
-  description: z.string().trim().min(1, "请描述案情").max(1000),
-});
-
-type FormData = z.infer<typeof schema>;
+import {
+  caseTypes,
+  contactSchema,
+  isKnownCaseType,
+  type ContactFormData,
+} from "@/lib/contact-schema";
 
 interface AnalysisResult {
   case_type: string;
@@ -31,20 +26,18 @@ interface AnalysisResult {
   suggested_actions: string[];
 }
 
-const caseTypes = ["争议解决", "公司商事", "知识产权", "资本市场", "刑事辩护", "劳动人事", "其他"];
-
 const ContactSection = () => {
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
 
-  const form = useForm<FormData>({
-    resolver: zodResolver(schema),
+  const form = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
     defaultValues: { name: "", phone: "", email: "", caseType: "", description: "" },
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: ContactFormData) => {
     setSubmitting(true);
     try {
       const { data: result, error } = await supabase.functions.invoke("submit-contact", {
@@ -82,14 +75,14 @@ const ContactSection = () => {
 
       setAnalysisResult(data);
 
-      if (data.case_type && caseTypes.includes(data.case_type)) {
+      if (data.case_type && isKnownCaseType(data.case_type)) {
         form.setValue("caseType", data.case_type);
       }
 
       toast({ title: "分析完成", description: "AI 已生成初步法律分析，请查看下方结果。" });
-    } catch (err: any) {
+    } catch (err) {
       console.error("Analyze error:", err);
-      const msg = err?.message || "分析失败，请稍后重试";
+      const msg = err instanceof Error ? err.message : "分析失败，请稍后重试";
       toast({ title: "分析失败", description: msg, variant: "destructive" });
     } finally {
       setAnalyzing(false);
